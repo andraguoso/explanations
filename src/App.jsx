@@ -1,37 +1,66 @@
 import { useState } from 'react'
-import ShowTechnique, { techniques } from "./components/Technique"
+
+import ShowTechnique, { bronzes } from "./components/Technique"
+import { silvers } from "./components/Technique"
+import { golds } from "./components/Technique"
+
 import NavBar from "./components/Navigate"
-
-pages = [];
-
-function goPage() {
-
-}
 
 function App() {
   const [currentT, setCurrentT] = useState(null);
 
   return (
     <>
-      <h1>explanations</h1>
-      <p>
-        problem solutions and explanations of some concepts for competitive programming c:
-      </p>
-      <span>brute force</span>
-      <span>binary search</span>
-      <span>graph implementations</span>
-      <span>depth-first search</span>
+      <section className="flex flex-col p-10 gap-2 justify-center items-center">
+        <h1 className="rounded-lg font-bold text-8xl p-5 text-rose bg-cielo">
+          explanations
+        </h1>
 
-      <span
-        className="technique-span"
-        onClick={() => setCurrentT(technique)}
-      >
-        {technique.name}
-      </span>
+        <p>
+          problem solutions and explanations of some concepts for competitive programming c:
+        </p>
 
-      <ShowTechnique technique={currentT} />
+        <div className="flex flex-row gap-10">
+          <div className="p-3 rounded-lg bg-menta">
+            <span className="font-bold">bronze topics</span>
+            {bronzes.map((technique) => (
+              <span
+                className="flex flex-row"
+                onClick={() => setCurrentT(technique)}
+              >
+                {technique.name}
+              </span>
+            ))}
+          </div>
 
-      <NavBar />
+          <div className="p-3 rounded-lg bg-menta">
+            <span className="font-bold">silver topics</span>
+            {silvers.map((technique) => (
+              <span
+                className="flex flex-row"
+                onClick={() => setCurrentT(technique)}
+              >
+                {technique.name}
+              </span>
+            ))}
+          </div>
+
+          <div className="p-3 rounded-lg bg-menta">
+            <span className="font-bold">gold topics</span>
+            {golds.map((technique) => (
+              <span
+                className="flex flex-row"
+                onClick={() => setCurrentT(technique)}
+              >
+                {technique.name}
+              </span>
+            ))}
+          </div>
+        </div>
+        <ShowTechnique technique={currentT} />
+
+        <NavBar />
+      </section>
     </>
   )
 }

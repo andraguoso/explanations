@@ -7,21 +7,22 @@ const techniques = [
     },
     {
         name: "binary search",
-        problemName: "",
+        problemName: "Coins and Triangle",
         problemStatement: "",
         problemCode: ""
     },
     {
         name: "depth-first search",
-        problemName: "",
+        problemName: "Building Roads",
         problemStatement: "",
         problemCode: ""
     }
 ]
 
-export default function ShowTechnique() {
-    const [index, setIndex] = useState(0);
-    let technique = techniques[index];
+export { techniques };
+
+
+export default function ShowTechnique({ technique }) {
     return (
         <>
             <h1>{technique.name}</h1>

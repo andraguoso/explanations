@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import ShowTechnique from "./components/Technique"
+import ShowTechnique, { techniques } from "./components/Technique"
+import NavBar from "./components/Navigate"
 
 pages = [];
 
+function goPage() {
+
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentT, setCurrentT] = useState(null);
 
   return (
     <>
@@ -16,6 +21,17 @@ function App() {
       <span>binary search</span>
       <span>graph implementations</span>
       <span>depth-first search</span>
+
+      <span
+        className="technique-span"
+        onClick={() => setCurrentT(technique)}
+      >
+        {technique.name}
+      </span>
+
+      <ShowTechnique technique={currentT} />
+
+      <NavBar />
     </>
   )
 }

@@ -1,19 +1,62 @@
 const bronzes = [
     {
         name: "brute force",
+        concept: "solving by brute force or complete search is usually the baseline approach to attacking any problem, and is quite helpful to further develop more complex ideas.",
         problems: [
+            {
+                problemName: "IQ Test",
+                source: "Codeforces",
+                diff: "1100",
+                statement: `
+                    In the city of Ultima Thule job applicants are often offered an IQ test.
+                    The test is as follows: the person gets a piece of squared paper with a 4x4 square painted on it. Some of the square's cells are painted black and others are painted white. Your task is to repaint at most one cell the other color so that the picture has a 2x2 square, completely consisting of cells of the same color. If the initial picture already has such a square, the person should just say so and the test will be completed.
+                    Your task is to write a program that determines whether it is possible to pass the test. You cannot pass the test if either repainting any cell or no action doesn't result in a 2x2 square, consisting of cells of the same color.
+                
+                `,
+                code: `
+                    #include <bits/stdc++.h>
+                    using namespace std;
+                    char grid[5][5];
+                    bool ok(int i, int j) {
+                        vector<pair<int, int>> s = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+                        int sh = 0, ps =0;
+                        for(int k=0; k<4; k++) {
+                            if((k==1 ||k == 3) && j==4) continue;
+                            if((k==2 || k == 3) && i==4) continue;
+
+                            if(grid[i+s[k].first][j+s[k].second] == '#') sh++;
+                            else ps++;
+                        }
+                        return sh >= 3 || ps >= 3;
+                    }
+                    
+                    int main() {
+	                    for(int i=1; i<=4; i++) {
+                            for(int j=1; j<=4; j++) {
+                                cin>>grid[i][j];
+                            }
+                        }
+
+                        for(int i=1; i<=4; i++) {
+                            for(int j=1; j<=4; j++) {
+                                if(ok(i, j)) {
+                                    cout << "YES"; return 0;
+                                }
+                            }
+                        }
+                        cout << "NO";
+                    }
+
+                `
+            },
             {
                 problemName: "",
                 source: "",
                 diff: "",
-                statement: "",
-                code: ""
-            },
-            {}
+                statement: ``,
+                code: ``
+            }
         ]
-    },
-    {
-
     },
     {
         name: "graph implementations",
@@ -34,35 +77,81 @@ const bronzes = [
                     You've got a connected non-directed graph that characterizes the computer network in Polycarpus' corporation. Help him find out, which topology type the given network is. If that is impossible to do, say that the network's topology is unknown.
                 `,
                 code: `
-                    #include <bits/stdc++.h>
-                    using namespace std;
-                    int main() {
-                        int n,m; cin>>n>>m;
-                        vector<vector<int>> v(n, vector<int>(0));
-                        for(int i=0; i<m; i++) {
-                            int a,b; cin>>a>>b; a--, b--;
-                            v[a].push_back(b); v[b].push_back(a);
-                        }
-                        // uno: number of vertex with degree = 1
-                        // dos: number of vertex with degree = 2
-                        // k: number of vertex with degree more than 2
-                        int uno = 0, dos = 0, k = 0;
-                        for(auto x:v) {
-                            if(x.size() == 1) uno++;
-                            else if(x.size() == 2) dos++;
-                            else k++;
-                        }
-                        if(uno + dos + k == n) {
-                            if(uno == 2 && dos == n - 2) cout << "bus topology";
-                            else if(dos == n) cout << "ring topology";
-                            else if(uno == n-1 && k == 1) cout << "star topology";
-                            else cout << "unknown topology";
-                        }
-                        else cout << "unknown topology";
-                    }
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n,m; cin>>n>>m;
+    vector<vector<int>> v(n, vector<int>(0));
+    for(int i=0; i<m; i++) {
+        int a,b; cin>>a>>b; a--, b--;
+        v[a].push_back(b); v[b].push_back(a);
+    }
+
+    // uno: number of vertex with degree = 1
+    // dos: number of vertex with degree = 2
+    // k: number of vertex with degree more than 2
+    int uno = 0, dos = 0, k = 0;
+    for(auto x:v) {
+        if(x.size() == 1) uno++;
+        else if(x.size() == 2) dos++;
+        else k++;
+    }
+    
+    if(uno + dos + k == n) {
+        if(uno == 2 && dos == n - 2) cout << "bus topology";
+        else if(dos == n) cout << "ring topology";
+        else if(uno == n-1 && k == 1) cout << "star topology";
+        else cout << "unknown topology";
+    }
+    
+    else cout << "unknown topology";
+}
                 `
             },
-            {}
+            {
+                problemName: "Graph",
+                source: "Aizu Online Judge",
+                diff: "",
+                statement: `
+                    There are two standard ways to represent a graph G = (V, E), where V is a set of vertices and E is a set of edges: adjacency list representation and adjacency matrix representation.
+
+                    An adjacency-list representation consists of an array Adj[|V|] of |V| lists, one for each vertex in V. For each u ∈ V, the adjacency list Adj[u] contains all vertices v such that there is an edge (u, v) ∈ E. That is, 
+                    Adj[u] consists of all vertices adjacent to u in G.
+
+                    An adjacency-matrix representation consists of |V|x|V| matrix A = a[i][j] such that a[i][j] = 1 if (i, j) ∈ E, a[i][j] = 0 otherwise.
+
+                    Write a program which reads a directed graph G represented by the adjacency list, and prints its adjacency-matrix representation. 
+                    G consists of n(n =|V|) vertices identified by their IDs 1,2,..,n respectively.
+                `,
+                code: `
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n; cin>>n;
+    int v[n][n];
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            v[i][j] = 0;
+        }
+    }
+
+    for(int i=1; i<=n; i++) {
+        int a,b; cin>>a>>b;
+        a--;
+        for(int j=0; j<b; j++) {
+            int u; cin>>u; u--; v[a][u] = 1;
+        }
+    }
+
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            if(j!=n-1) cout << v[i][j] << " ";
+            else cout << v[i][j] << endl;
+        }
+    }
+}
+                `
+            }
         ]
     },
 ]
@@ -70,6 +159,7 @@ const bronzes = [
 const silvers = [
     {
         name: "prefix sums",
+        concept: "in an array, sometimes you will be asked to keep sums or compare sums of subarrays or subsequent elements. to save yourself the O(n) operations, you can keep an additional array p[N], where p[i] = sum of elements of array a from 0 to i, 0-indexed. \ncorresponding formula: p[i] = p[i-1] + a[i]",
         problems: [
             {
                 problemName: "",
@@ -82,6 +172,7 @@ const silvers = [
     },
     {
         name: "binary search",
+        concept: "",
         problems: [
             {
                 problemName: "Coins and Triangle",
@@ -130,11 +221,50 @@ const silvers = [
                     }
                 `
             },
-            {}
+            {
+                problemName: "Funky Numbers",
+                source: "Codeforces",
+                diff: "1300",
+                statement: `
+                    As you very well know, this year's funkiest numbers are so called triangular numbers (that is, integers that are representable as , where k is some positive integer), and the coolest numbers are those that are representable as a sum of two triangular numbers.
+
+                    A well-known hipster Andrew adores everything funky and cool but unfortunately, he isn't good at maths. Given number n, help him define whether this number can be represented by a sum of two triangular numbers (not necessarily different)!
+                `,
+                code: `
+                    #include <bits/stdc++.h>
+                    using namespace std;
+                    typedef long long ll;
+                    const ll N = 1e5;
+                    ll f(ll x) {
+                        return x*(x+1)/2;
+                    }
+
+                    int main() {
+                        ios::sync_with_stdio(false);
+                        cin.tie(nullptr);
+                        ll n; cin>>n;
+                        for(ll i=1; i<=N; i++) {
+                            ll l=1, r=i;
+                            while(l<=r) {
+                                ll x = (l+r)>>1;
+                                if(f(x) + f(i) == n) {
+                                    cout << "YES"; return;
+                                }    
+                                else if(f(x) + f(i) < n) l = x + 1;
+                                else r = x - 1;
+                            }
+                        }
+                        cout << "NO";
+                        return 0;
+                    }
+
+                `
+            }
         ]
     },
     {
         name: "depth-first search",
+        concept: "",
         problems: [
             {
                 problemName: "Building Roads",
@@ -233,13 +363,31 @@ const silvers = [
 const golds = [
     {
         name: "divisibility",
+        concept: "divisibility refers to the property of a number being able to be divided by others or by a specific other. for example, we can say that 6 is divisible by 3, as 6/3 = 2, which is an integer number. also, 6%3 = 0, as in, 0 = 6 mod 3. ",
         problems: [
             {
-                problemName: "",
-                source: "",
+                problemName: "Counting Divisors",
+                source: "CSES Problem Set",
                 diff: "",
                 statement: ``,
-                code: ``
+                code: `
+                    #include <bits/stdc++.h>
+                    using namespace std;
+                    void sol() {
+                        int n; cin>>n;
+                        int ans=0;
+                        for(int x=1; x*x<=n; x++) {
+                            if(n%x) continue;
+                            ans++; if(x != n/x) ans++;
+                        }
+                        cout << ans << endl;
+                    }
+
+                    int main() {
+                        int t; cin>>t;
+                        while(t--) sol();
+                    }
+                `
             },
             {
                 problemName: "",
@@ -252,6 +400,7 @@ const golds = [
     },
     {
         name: "modular arithmetic",
+        concept: "you probably are familiar with the following symbol and its use in programming: it refers to the reside of an inexact division, called the module. modular arithmetic is a section of arithmetic that expands on this element, which comes to be quite useful in problems that require last digits of really large numbers [numbers to the power of other really large numbers]",
         problems: [
             {
                 problemName: "",
@@ -268,39 +417,91 @@ const golds = [
                 code: ``
             }
         ]
-    },
-    {}
+    }
 ]
 
 
 export { bronzes };
 export { silvers };
 export { golds };
+import { useState } from "react";
+
 
 export default function ShowTechnique({ technique }) {
+    const [selectedP, setSelectedP] = useState(null);
+    const [show, setShow] = useState("statement");
+
     if (!technique) return null;
+
     return (
-        <>
-            <h1>{technique.name}</h1>
-            {
-                technique.problems.map((problem, i) => (
-                    <div>
-                        <h2 className="font-bold">{problem.problemName}</h2>
-                        <span className="flex flex-row gap-2">
-                            <span className="">{problem.source}</span>
-                            <span>·</span>
-                            <span>{problem.diff}</span>
-                        </span>
-                        <div className="flex flex-row">
-                            <p className="w-2/5">{problem.statement}</p>
-                            <pre>
-                                <code className="w-3/5">{problem.code}</code>
-                            </pre>
-                        </div>
+        <section className="flex flex-col gap-4 w-[100vh]">
+            <span className="font-bold">{technique.name}</span>
+
+            <section>
+                <span>brief concept</span>
+                <p>{technique.concept}</p>
+            </section>
+
+            <section className="flex flex-col gap-2">
+                <span>problem set</span>
+                <section className="flex flex-row gap-3">
+                    <div className="flex flex-col items-start w-1/3 gap-1">
+                        {
+                            technique.problems.map((problem, i) => (
+                                <button key={i}
+                                    onClick={() => {
+                                        setSelectedP(problem);
+                                        setShow("statement");
+                                    }}
+                                    className="bg-gray-200 rounded-md p-2 w-[25vh]"
+                                >
+                                    <span className="flex flex-col items-start">
+                                        <span>{problem.problemName}</span>
+                                        <span className="flex flex-row gap-2 text-[1.9vh] text-gray-500">
+                                            <span>{problem.source}</span>
+                                            <span>·</span>
+                                            <span>{problem.diff}</span>
+                                        </span>
+                                    </span>
+                                </button>
+                            ))
+                        }
                     </div>
-                )
-                )
-            }
-        </>
+                    <div className="w-2/3">
+                        {
+                            <>
+                                {selectedP ? (
+                                    <>
+                                        <span className="font-bold">{selectedP.problemName}</span>
+
+                                        <div className="flex flex-row gap-5">
+                                            <button onClick={() => setShow("statement")}>
+                                                statement
+                                            </button>
+                                            <button onClick={() => setShow("code")}>
+                                                code
+                                            </button>
+                                        </div>
+
+                                        {
+                                            show === "statement" ? (
+                                                <p>
+                                                    {selectedP.statement}
+                                                </p>
+                                            ) : (
+                                                <pre>
+                                                    <code>{selectedP.code}</code>
+                                                </pre>
+                                            )}
+                                    </>
+                                ) : (
+                                    <p>pick whoever sounds best!</p>
+                                )}
+                            </>
+                        }
+                    </div>
+                </section>
+            </section>
+        </section>
     )
 }
